@@ -4,6 +4,8 @@ import androidx.lifecycle.*
 import com.simonigh.mojo.data.Member
 import com.simonigh.mojo.data.MembersRepository
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import timber.log.Timber
+import timber.log.Timber.Forest
 
 class MemberListViewModel(
     private val membersRepository: MembersRepository
@@ -32,6 +34,13 @@ class MemberListViewModel(
                _state.postValue(it)
             }.subscribe()
         )
+    }
+    
+    fun removeMember(name: String) {
+        membersRepository.removeMember(name).onErrorComplete().doOnComplete {
+            Timber.d("Member removed")
+            loadMembers()
+        }.subscribe()
     }
     override fun onCleared() {
         super.onCleared()

@@ -35,6 +35,10 @@ class MembersRepository(
             .subscribeOn(Schedulers.io())
     }
     
+    fun removeMember(name: String): Completable {
+        return cacheDatabase.memberDao.removeMember(name).subscribeOn(Schedulers.io())
+    }
+    
     
     private fun getMemberLocale(): Single<List<Member>> {
         return cacheDatabase.memberDao.getMembers().subscribeOn(Schedulers.io()).map { localList ->

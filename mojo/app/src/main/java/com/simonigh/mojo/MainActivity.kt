@@ -61,6 +61,9 @@ class MainActivity : AppCompatActivity() {
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(itemBinding.itemMemberPicture)
             }
+            itemBinding.itemRemoveButton.setOnClickListener {
+                viewModel.removeMember(member.name)
+            }
             binding.activityMembersListLayout.addView(itemBinding.root)
         }
         
