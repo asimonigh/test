@@ -10,6 +10,6 @@ data class MemberDto(
     val platform: String? = null
 )
 
-fun MemberDto.toMember(): Member {
-    return Member(name, position, platform, pic)
+fun MemberDto.toMember(index:Int): Member {
+    return Member(name, position, platform, pic, index)
 }

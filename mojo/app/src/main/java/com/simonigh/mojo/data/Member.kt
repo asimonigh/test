@@ -4,5 +4,6 @@ data class Member(
     val name: String,
     val position: String,
     val platform: String?,
-    val picUrl:String?
+    val picUrl:String?,
+    val index: Int,
     )

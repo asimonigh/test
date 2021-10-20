@@ -6,19 +6,14 @@ import android.view.*
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.simonigh.mojo.data.Member
 import com.simonigh.mojo.databinding.*
-import com.simonigh.mojo.databinding.ActivityMainBinding.inflate
 import com.simonigh.mojo.presentation.MemberListViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import timber.log.Timber.Forest
 
 class MainActivity : AppCompatActivity() {
     
@@ -63,6 +58,12 @@ class MainActivity : AppCompatActivity() {
             }
             itemBinding.itemRemoveButton.setOnClickListener {
                 viewModel.removeMember(member.name)
+            }
+            itemBinding.itemUpButton.setOnClickListener {
+                viewModel.upMember(member)
+            }
+            itemBinding.itemDownButton.setOnClickListener {
+                viewModel.downMember(member)
             }
             binding.activityMembersListLayout.addView(itemBinding.root)
         }
@@ -120,7 +121,6 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
     }

@@ -9,9 +9,10 @@ data class MemberEntity(
     @PrimaryKey val name: String,
     val position: String,
     val platform: String?,
-    val picUrl:String?
+    val picUrl:String?,
+    val index: Int
 )
 
 fun MemberEntity.toMember(): Member {
-    return Member(name, position, platform,picUrl)
+    return Member(name, position, platform,picUrl, index)
 }

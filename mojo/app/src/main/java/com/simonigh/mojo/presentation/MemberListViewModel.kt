@@ -5,7 +5,6 @@ import com.simonigh.mojo.data.Member
 import com.simonigh.mojo.data.MembersRepository
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import timber.log.Timber
-import timber.log.Timber.Forest
 
 class MemberListViewModel(
     private val membersRepository: MembersRepository
@@ -22,7 +21,8 @@ class MemberListViewModel(
     }
     
     fun addMember(name: String, position: String, platform: String?) {
-        membersRepository.addMember(Member(name, position, platform, null))
+        val lastIndex = state.value?.lastIndex ?: -1
+        membersRepository.addMember(Member(name, position, platform, null, lastIndex + 1), lastIndex + 1)
             .onErrorComplete().doOnComplete {
                 loadMembers()
             }.subscribe()
@@ -30,8 +30,8 @@ class MemberListViewModel(
     
     private fun loadMembers() {
         disposeBag.add(
-            membersRepository.getMembers().doOnSuccess {
-               _state.postValue(it)
+            membersRepository.getMembers().doOnSuccess {list ->
+               _state.postValue(  list.sortedBy { it.index })
             }.subscribe()
         )
     }
@@ -47,6 +47,26 @@ class MemberListViewModel(
         disposeBag.clear()
     }
     
+    
+    fun upMember(member: Member) {
+        var index = state.value?.indexOf(member)
+        index?.let {
+            index--
+            membersRepository.addMember(member.copy(index = index),index).onErrorComplete().doOnComplete {
+                loadMembers()
+            }.subscribe()
+        }
+       
+    }
+    
+    fun downMember(member: Member) {
+        var index = state.value?.indexOf(member)
+        index?.let {
+            index++
+            membersRepository.addMember(member.copy(index = index),index).onErrorComplete().doOnComplete {
+                loadMembers()
+            }.subscribe()
+        }
+    }
 }
 
-data class MembersListState(val members: List<Member>, val error: String? = null)
