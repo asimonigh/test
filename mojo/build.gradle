@@ -1,4 +1,12 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+ext {
+    koin_version = "3.1.2"
+    glide_version = "4.12.0"
+    rxjava_version = "3.1.1"
+    retrofit_version = "2.9.0"
+    room_version = "2.3.0"
+}
+
 buildscript {
     repositories {
         google()
