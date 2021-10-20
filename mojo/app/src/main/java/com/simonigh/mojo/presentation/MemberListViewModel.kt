@@ -16,13 +16,23 @@ class MemberListViewModel(
     private val disposeBag = CompositeDisposable()
     
     init {
+        loadMembers()
+    }
+    
+    fun addMember(name: String, position: String, platform: String?) {
+        membersRepository.addMember(Member(name, position, platform, null))
+            .onErrorComplete().doOnComplete {
+                loadMembers()
+            }.subscribe()
+    }
+    
+    private fun loadMembers() {
         disposeBag.add(
             membersRepository.getMembers().doOnSuccess {
-                _state.postValue(it)
+               _state.postValue(it)
             }.subscribe()
         )
     }
-    
     override fun onCleared() {
         super.onCleared()
         disposeBag.clear()

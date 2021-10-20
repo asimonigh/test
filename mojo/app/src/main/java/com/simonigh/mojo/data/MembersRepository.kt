@@ -28,6 +28,14 @@ class MembersRepository(
                 }
         }
     }
+    
+    fun addMember(member: Member): Completable {
+        return cacheDatabase.memberDao
+            .addMember(member.toMemberEntity())
+            .subscribeOn(Schedulers.io())
+    }
+    
+    
     private fun getMemberLocale(): Single<List<Member>> {
         return cacheDatabase.memberDao.getMembers().subscribeOn(Schedulers.io()).map { localList ->
             localList.map { it.toMember() }
@@ -39,11 +47,6 @@ class MembersRepository(
         }.onErrorReturnItem(listOf())
     }
     
-    fun addMember(member: Member): Completable {
-        return cacheDatabase.memberDao
-            .addMember(member.toMemberEntity())
-            .subscribeOn(Schedulers.io())
-    }
 }
 
 fun Member.toMemberEntity(): MemberEntity {

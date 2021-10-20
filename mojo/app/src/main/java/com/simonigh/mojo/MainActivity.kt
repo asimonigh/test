@@ -1,7 +1,9 @@
 package com.simonigh.mojo
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -11,8 +13,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.simonigh.mojo.data.Member
-import com.simonigh.mojo.databinding.ActivityMainBinding
-import com.simonigh.mojo.databinding.ItemMemberBinding
+import com.simonigh.mojo.databinding.*
+import com.simonigh.mojo.databinding.ActivityMainBinding.inflate
 import com.simonigh.mojo.presentation.MemberListViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -68,9 +70,40 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
     
         binding.fab.setOnClickListener { view ->
+            showAddMemberDialog()
+            
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+    }
+    
+    private fun showAddMemberDialog() {
+        val builder = AlertDialog.Builder(this)
+        
+        val dialogBinding = DialogAddMemberBinding.inflate(layoutInflater)
+    
+        // Inflate and set the layout for the dialog
+        // Pass null as the parent view because its going in the dialog layout
+        builder.setView(dialogBinding.root)
+            // Add action buttons
+            .setPositiveButton("Add",
+                DialogInterface.OnClickListener { dialog, id ->
+                    val name = dialogBinding.inputName.text.toString()
+                    val position = dialogBinding.inputPosition.text.toString()
+                    var platform : String? = dialogBinding.inputPlatform.text.toString()
+                    if(!name.isNullOrBlank() && !position.isNullOrEmpty()){
+                        if(platform.isNullOrEmpty()) {
+                            platform = null
+                        }
+                        viewModel.addMember(name, position, platform)
+                        dialog.cancel()
+                    }
+                })
+            .setNegativeButton("Cancel",
+                DialogInterface.OnClickListener { dialog, id ->
+                    dialog.cancel()
+                })
+        builder.create().show()
     }
     
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
