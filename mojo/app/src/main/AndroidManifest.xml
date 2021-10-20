@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.simonigh.mojo">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".MojoTestApplication"
         android:allowBackup="true"

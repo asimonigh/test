@@ -20,8 +20,5 @@ class MojoTestApplication : Application() {
             androidContext(this@MojoTestApplication)
             modules(appModule)
         }
-        
     }
-    
-    
 }

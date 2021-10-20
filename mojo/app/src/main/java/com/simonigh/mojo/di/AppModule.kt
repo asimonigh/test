@@ -1,7 +1,13 @@
 package com.simonigh.mojo.di
 
+import com.simonigh.mojo.data.MembersRepository
+import com.simonigh.mojo.data.remote.MemberApi
+import com.simonigh.mojo.presentation.MemberListViewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
-
+    single { MemberApi.create() }
+    single { MembersRepository(get()) }
+    viewModel { MemberListViewModel(get()) }
 }
